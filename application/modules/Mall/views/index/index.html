@@ -1,0 +1,96 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title></title>
+    <link rel="stylesheet" href="//g.alicdn.com/msui/sm/0.6.2/css/sm.css">
+    <link rel="stylesheet" href="//g.alicdn.com/msui/sm/0.6.2/css/sm-extend.min.css">
+    <link rel="stylesheet" href="/public/mall/css/style.css">
+</head>
+
+<body>
+{{include file="application/views/common/header.html"}}
+<!-- 侧栏 -->
+<div class="panel panel-left panel-cover theme-dark sidebar" id='panel-js-demo'>
+    <div class="bar bar-header-secondary">
+        <div class="searchbar">
+            <a class="searchbar-cancel">取消</a>
+            <div class="search-input">
+                <label class="icon icon-search" for="search"></label>
+                <input type="search" id='search' placeholder='输入关键字...'/>
+            </div>
+        </div>
+    </div>
+    <div class="list-group">
+        <ul>
+            <li class="list-group-title">商品分类</li>
+            {{if $categorys}}
+            {{foreach from=$categorys item=vo}}
+            <li class="cate_class"><a href="/mall/product/index?cid={{$vo.pc_id}}"><div class="item-title">{{$vo.pc_name}}</div></a></li>
+            {{/foreach}}
+            {{/if}}
+        </ul>
+    </div>
+</div>
+
+
+
+<div class="content index">
+    <div class="content-padded">
+        <!-- Slider -->
+        <div class="swiper-container" data-space-between='10'>
+            <div class="swiper-wrapper">
+                {{if $banner}}
+                {{foreach from=$banner item=vo}}
+                <div class="swiper-slide"><a href="{{$vo.a_link}}"><img src="{{$vo.a_picture}}" alt=""></a></div>
+                {{/foreach}}
+                {{/if}}
+            </div>
+            <div class="swiper-pagination"></div>
+        </div>
+    </div>
+
+
+    <div class="content-padded">
+        <div class="content-block-title">店长推荐</div>
+        {{if $products}}
+        {{foreach from=$products item=vo}}
+        <div class="card demo-card-header-pic">
+            <a href="/mall/product/details/pid/{{$vo.p_id}}">
+                <div valign="bottom" class="card-header color-white no-border no-padding">
+                    <img class='card-cover' src="{{$smarty.const.APP_IMAGE_URL}}{{$vo.p_cover}}" alt="">
+                </div>
+                <div class="card-content">
+                    <div class="card-content-inner">
+                        <p>{{$vo.p_title}}</p>
+                        <p><span>￥{{$vo.p_price}}</span></p>
+                    </div>
+                </div>
+            </a>
+        </div>
+        {{/foreach}}
+        {{/if}}
+    </div>
+</div>
+<script type='text/javascript' src='//g.alicdn.com/sj/lib/zepto/zepto.js' charset='utf-8'></script>
+<script type='text/javascript' src='//g.alicdn.com/msui/sm/0.6.2/js/sm.js' charset='utf-8'></script>
+<script type='text/javascript' src='//g.alicdn.com/msui/sm/0.6.2/js/sm-extend.min.js' charset='utf-8'></script>
+{{include file="application/views/common/footer.html"}}
+
+<script>
+    $(function() {
+        var config = {speed: 400};
+        $(".swiper-container").swiper(config);
+        $(".content").scroller({
+            type: 'native'
+        });
+
+        $('#search').change(function(){
+            var content = $(this).val();
+            location.href = '/mall/product/index?title=' + content;
+        })
+    });
+</script>
+</body>
+</html>

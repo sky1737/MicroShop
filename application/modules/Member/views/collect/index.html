@@ -1,0 +1,57 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>收藏</title>
+    <link rel="stylesheet" href="//g.alicdn.com/msui/sm/0.6.2/css/sm.css">
+    <link rel="stylesheet" href="/public/mall/css/style.css">
+</head>
+
+<body>
+
+<header class="bar bar-nav">
+    <h1 class="title">收藏</h1>
+</header>
+
+
+<!-- 列表 -->
+<div class="content">
+    <div class="keep">
+        <div class="list-block media-list">
+            <ul>
+                {{if $data}}
+                    {{foreach from=$data item=vo}}
+                        <li>
+                            <a href="/mall/product/details/pid/{{$vo.p_id}}" class="item-link item-content">
+                                <div class="item-media"><img src="{{$smarty.const.APP_IMAGE_URL}}{{$vo.p_cover}}" style='width: 4rem;'></div>
+                                <div class="item-inner">
+                                    <div class="item-title-row">
+                                        <div class="item-title">{{$vo.p_title}}</div>
+                                        <div class="item-after">￥{{$vo.p_price}}</div>
+                                    </div>
+                                    <div class="item-text">{{$vo.p_title}}</div>
+                                </div>
+                            </a>
+                        </li>
+                    {{/foreach}}
+                {{/if}}
+
+            </ul>
+        </div>
+    </div>
+</div>
+
+
+<script type='text/javascript' src='//g.alicdn.com/sj/lib/zepto/zepto.js' charset='utf-8'></script>
+<script type='text/javascript' src='//g.alicdn.com/msui/sm/0.6.2/js/sm.js' charset='utf-8'></script>
+{{include file="application/views/common/footer.html"}}
+<script>
+    $(function() {
+        $(".content").scroller({
+            type: 'native'
+        });
+    });
+</script>
+</body>
+</html>

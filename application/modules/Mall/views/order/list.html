@@ -1,0 +1,128 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>订单列表</title>
+    <link rel="stylesheet" href="//g.alicdn.com/msui/sm/0.6.2/css/sm.css">
+    <link rel="stylesheet" href="/public/mall/css/style.css">
+    <link rel="stylesheet" href="/public/mall/js/dropload/dropload.min.js">
+</head>
+<style>
+    .dropload-down{position: absolute;bottom:15vw; width:200px;margin:0 0 0 -100px;left:50%;text-align: center; z-index: 999;}
+    .tabs{ position: relative;padding-bottom: 25vw;}
+ </style>
+<body>
+<div class="buttons-tab lp-menu">
+    <a href="/mall/order/list" class="tab-link button {{if !$showType}}active{{/if}}">全部</a>
+    <a href="/mall/order/list/?showType=1" class="tab-link button {{if $showType==1}}active{{/if}}">待付款</a>
+    <a href="/mall/order/list/?showType=2" class="tab-link button {{if $showType==2}}active{{/if}}">待发货</a>
+    <a href="/mall/order/list/?showType=3" class="tab-link button {{if $showType==3}}active{{/if}}">待收货</a>
+    <a href="/mall/order/list/?showType=4" class="tab-link button {{if $showType==4}}active{{/if}}">待评价</a>
+    <a href="/mall/order/list/?showType=5" class="tab-link button {{if $showType==5}}active{{/if}}">退款中</a>
+</div>
+<!-- 列表 -->
+<div class="content orders-list">
+    <div class="tabs">
+        <!-- tab1 -->
+        <div id="order_list" class="tab active">
+            {{if $allData}}
+            {{foreach from=$allData item=v}}
+            <div class="card">
+                <a href="/mall/order/details/id/{{$v.o_id}}">
+                    <div class="card-header">
+                        {{if $v.o_pay_status==1 && $v.o_order_status==1}}
+                            待付款
+                        {{elseif $v.o_pay_status==3 && $v.o_order_status==1}}
+                            待发货
+                        {{elseif $v.o_pay_status==3 && $v.o_order_status==2}}
+                         待发货
+                        {{elseif $v.o_pay_status==3 && $v.o_order_status==3}}
+                         待评价
+                        {{elseif $v.o_pay_status==2 && $v.o_order_status==1}}
+                        订单取消
+                        {{/if}}
+                    </div>
+                    <div class="card-content">
+                        <div class="list-block media-list">
+                            <ul>
+                                <li class="item-content">
+                                    <div class="item-media">
+                                        <img src="{{if $v.p_cover}}{{$smarty.const.APP_IMAGE_URL}}{{$v.p_cover}}{{else}}{{/if}}" width="44">
+                                    </div>
+                                    <div class="item-inner">
+                                        <div class="item-title-row">
+                                            <div class="item-title">{{$v.p_title}}</div>
+                                        </div>
+                                        <div class="item-subtitle">型号：{{if $v.pp_names}}{{$v.pp_names}}{{else}}暂无{{/if}}（福州送货上门）</div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <span>共{{if $v.ol_num}}{{$v.ol_num}}{{else}}0{{/if}}件商品</span>
+                        <span>总价：￥{{if $v.o_payment_amount}}{{$v.o_payment_amount}}{{else}}0{{/if}}</span>
+                    </div>
+                </a>
+            </div>
+            {{/foreach}}
+            {{/if}}
+        </div>
+    </div>
+</div>
+
+<script src="/public/admin/js/jquery-2.0.2.min.js"></script>
+<script src="/public/mall/js/dropload/dropload.min.js"></script>
+
+{{include file="application/views/common/footer.html"}}
+<script>
+    var total    = parseInt('{{$total}}');
+    var pageSize = parseInt('{{$pageSize}}');
+    var showType = parseInt('{{$showType}}') > 0 ? parseInt('{{$showType}}') : '';
+
+    $(function(){
+
+        var page = 2;
+        if(total >= pageSize) {
+
+            $("#order_list").dropload({
+                domDown : {                                                          // 下方DOM
+                    domClass   : 'dropload-down',
+                    domRefresh : '<div class="dropload-refresh">↑上拉加载更多</div>',
+                    domLoad    : '<div class="dropload-load"><span class="loading"></span>加载中...</div>',
+                    domNoData  : '<div class="dropload-noData">没有啦╮(╯_╰)╭</div>'
+                },
+                scrollArea : window,
+                loadDownFn : function(me){
+
+                    $.ajax({
+                        type: 'GET',
+                        url : "/mall/order/list/page/"+page+"?type=load&showType=" + showType,
+                        dataType: 'html',
+                        success: function(data){
+                            if(data) {
+                                //赋值数据
+                                $("#order_list").append(data);
+                                page++;
+                            } else {
+                                // 锁定
+                                me.lock();
+                                // 无数据
+                                me.noData();
+                            }
+                            // 每次数据加载完，必须重置
+                            me.resetload();
+                        },
+                        error: function(xhr, type){
+                            // 即使加载出错，也得重置
+                            me.resetload();
+                        }
+                    });
+                }
+            });
+        }
+    });
+</script>
+</body>
+</html>

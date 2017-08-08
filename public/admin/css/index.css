@@ -1,0 +1,32 @@
+body {margin:0; background-color:#EEE;}
+#main-nav{background:url(../img/bg-nav.gif) repeat-x;}
+#main-nav li{float:left;text-align:center;}
+#main-nav li a{color:#DAD9D9;font-size:14px;line-height:40px; padding:0px 8px; margin:0; display:block;}
+#main-nav .active a {color:#333333; background-color:#EEE; text-shadow: 0 -1px 0 rgba(255,255,255,0.2);}
+#container {height: 55px;}
+#login-bar a {color:white}
+
+#navigation {border:none;}
+#navigation a{position:relative; background:#F7F2F2; }
+#navigation > .active > a,
+#navigation > .active > a:hover {color: #555;cursor: default;background-color: #8ECEEE;	border: 1px solid #DDD;	border-bottom-color: transparent;padding-right:40px;}
+#navigation .icon-remove { position:absolute; top:0px; right:2px;cursor:pointer; display:none}
+#navigation .icon-refresh {position:absolute; top:18px; right:2px;cursor:pointer; display:none }
+#navigation .icon-flag {position:absolute; top:0px; right:20px;cursor:pointer; display:none }
+#navigation .active .icon-flag,
+#navigation .active .icon-remove ,
+#navigation .active .icon-refresh {display:block;}
+.row-fluid .span2{width: 14%;}
+.row-fluid .span10{width:84%;margin-left:0;}
+.btn-click,#container .btn-click-current{width:2%;height:130px;float:left;margin-top:8px;text-indent: -999999px; cursor: pointer;}
+.btn-click{background:url('../img/btn-click.png') no-repeat center top;}
+#container .btn-click-current{background:url('../img/btn-click-current.png') no-repeat center top;}
+.btn-top-click {background:url('../img/btn-click-top-current.png') no-repeat;}
+#container .span2 {margin-top: 8px;}
+#container .span10 {margin-top: 8px;}
+#container .accordion-toggle{font-size:14px;}
+#welcomeContent {padding:15px; background-color:#FFF; min-height: 720px;}
+
+#quickMemu div{ position: relative;}
+#quickMemu .icon-remove{ display: none; position: absolute; top: 0px; right: 0px; cursor: pointer;}
+#quickMemu div:hover .icon-remove{ display: block; }

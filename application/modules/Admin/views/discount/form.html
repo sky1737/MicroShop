@@ -1,0 +1,57 @@
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3 id="modalTtile">折扣商品管理</h3>
+</div>
+<!--内容区域-->
+<div class="modal-body">
+
+    <input type="hidden" name="id" value="{{$row.pd_id}}" />
+    <div class="control-group">
+        <label class="control-label">折扣标题</label>
+        <div class="controls">
+            <input name="pd_title" class="input-xlarge" size="16" type="text" value="{{$row.pd_title}}" datatype="*" nullmsg="请填写折扣标题" placeholder="折扣标题" />
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label">折扣商品</label>
+        <div class="controls">
+            <input name="p_id" class="input-xlarge" size="16" type="text" value="{{$row.p_id}}" datatype="*" nullmsg="请填写折扣商品ID" placeholder="折扣商品" />
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label">开始时间</label>
+        <div class="controls">
+            <input name="pd_startTime" class="input-xlarge" size="16" type="text" value="{{$row.pd_startTime}}" id="pd_startTime" datatype="*" nullmsg="请填写开始时间" placeholder="开始时间" />
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label">结束时间</label>
+        <div class="controls">
+            <input name="pd_endTime" class="input-xlarge" size="16" type="text" value="{{$row.pd_endTime}}" id="pd_endTime" datatype="*" nullmsg="请填写结束时间" placeholder="结束时间" />
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label">数量</label>
+        <div class="controls">
+            <input name="pd_number" class="input-xlarge" size="16" type="text" value="{{$row.pd_number}}" datatype="*" nullmsg="请填写数量" placeholder="数量" />
+        </div>
+    </div>
+</div>
+
+<div class="modal-footer">
+    <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+    <button class="btn btn-primary" type="submit">保存</button>
+</div>
+<script>
+    $('#pd_startTime').datetimepicker({
+        format: "yyyy-mm-dd HH:ii",
+        autoclose: 1,
+        pickerPosition: "bottom-left"
+    });
+
+    $('#pd_endTime').datetimepicker({
+        format: "yyyy-mm-dd HH:ii",
+        autoclose: 1,
+        pickerPosition: "bottom-left"
+    });
+</script>

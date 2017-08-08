@@ -1,0 +1,65 @@
+<div class="modal-header">
+	<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+	<h3 id="modalTtile">{{if $row.m_id}}编辑菜单{{else}}添加菜单{{/if}}</h3>
+</div>
+
+<input id="id" type="hidden" name="id" value="{{$row.m_id}}" /> 
+<div class="modal-body">
+	<div class="control-group">
+	   <label class="control-label" for="selectDept">一级菜单</label>
+	   <div class="controls">
+			<select id="menuEdit" name="menuEdit">
+				{{foreach from=$topList key=m_id item=top}}
+				<option value="{{$top.m_id}}">+{{$top.m_name}}</option>
+					{{foreach from=$menuList.$m_id.son item=val}}
+					<option value="{{$val.m_id}}">&nbsp;&nbsp;&nbsp;&nbsp;{{$val.m_name}}</option>
+					{{/foreach}}
+				{{/foreach}}
+			</select>
+	   </div>
+	</div>
+	<div class="control-group">
+	   <label class="control-label">菜单名</label>
+		<div class="controls">
+			<input type="text" name="name" value="{{$row.m_name}}" placeholder="菜单名">
+		</div>
+	</div>
+	<div class="control-group">
+		<label class="control-label">菜单URL</label>
+		<div class="controls">
+			<input type="text" name="url" placeholder="菜单URL" value="{{$row.m_url}}" datatype="*" nullmsg="请填写菜单URL" />
+		</div>
+	</div>
+	<div class="control-group">
+		<label class="control-label">菜单标记</label>
+		<div class="controls">
+			<input type="text" name="tag" placeholder="菜单标记" value="{{$row.m_tag}}" datatype="*" nullmsg="请填写菜单标记" />
+		</div>
+	</div>
+    <div class="control-group">
+        <label class="control-label">模块名称</label>
+        <div class="controls">
+            <input type="text" name="m_module_name" placeholder="模块名称" value="{{$row.m_module_name}}" datatype="*" nullmsg="请填写模块名称" />
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label">控制器名称</label>
+        <div class="controls">
+            <input type="text" name="m_controller_name" placeholder="控制器名称" value="{{$row.m_controller_name}}" datatype="*" nullmsg="请填写控制器名称" />
+        </div>
+    </div>
+
+	<div class="control-group">
+		<label class="control-label">排序</label>
+		<div class="controls">
+			<input type="text" name="order" placeholder="菜单排序" value="{{$row.m_order}}" datatype="*" nullmsg="请填写菜单排序" />
+		</div>
+	</div>
+</div>
+<div class="modal-footer">
+	<button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+	<button class="btn btn-primary" type="submit">保存</button>
+</div>
+<script>
+$("#menuEdit").val("{{$row.m_parent_id}}");
+</script>

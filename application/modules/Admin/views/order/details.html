@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>订单管理</title>
+    <!-- Bootstrap -->
+    <link href="/public/admin/css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link href="/public/admin/css/bootstrap.css" rel="stylesheet" media="screen">
+    <link href="/public/admin/css/bootstrap-responsive.min.css" rel="stylesheet">
+    <link href="/public/admin/css/bootstrap-customfile.css" rel="stylesheet" type="text/css" />
+    <link href="/public/admin/css/bootstrap-datetimepicker.css" rel="stylesheet">
+</head>
+<style>
+    .hide{display: none;}
+    .panel-body > p > b{width:100px; display: inline-block;border-right: dashed 1px #d5d5d5;margin-right:2%;}
+    .panel-body > p{padding-bottom: 15px;border-bottom: dashed 1px #c5c5c5;}
+    .panel_header{background: #999;width: 100%;padding:5px 0px 5px 20px; font-size:16px;margin-bottom:10px;color:#fff;}
+    .table > thead > tr > th{border:none;}
+    .clearafter:after{ clear:both; content:"."; height:0px; font-size:0px; visibility:hidden; display:block; }
+    .order_content li{width: 48%; float: left;padding:10px;border-bottom: dashed 1px #c5c5c5;}
+    .order_content li > b{width:100px; display: inline-block;margin-right:2%;}
+</style>
+<body>
+
+<div class="main">
+    <div id="right">
+        <!--面包屑导航-->
+        <ul class="breadcrumb">
+            <li><a href="/admin/order/index/">订单列表 </a></li>
+            <li class="active">{{$breadTitle}}</li>
+        </ul>
+        <div class="form-horizontal" style="width:95%;margin:0 auto;">
+            <div class="row">
+                <div class="col-sm-7">
+                    <div class="panel panel-success">
+                        <!-- Default panel contents -->
+                        <div class="panel-heading">购买人信息</div>
+                        <div class="panel-body">
+                            <div class="panel_header" >订单信息</div>
+                            <ul class="order_content clearafter">
+                                <li><b>订单ID:</b>&nbsp;&nbsp;{{$data.o_id}}</li>
+                                <li><b>订单编号:</b>&nbsp;&nbsp;{{$data.o_order_no}}</li>
+                                <li><b>用户ID:</b>&nbsp;&nbsp;{{$data.m_id}}</li>
+                                <li><b>购买数量:</b>&nbsp;&nbsp;{{$productNum}}</li>
+                                <li><b>订单总额:</b>&nbsp;&nbsp;{{$data.o_order_amount}}</li>
+                                <li><b>实付金额:</b>&nbsp;&nbsp;{{$data.o_payment_amount}}</li>
+                                <li><b>支付状态:</b>&nbsp;&nbsp;
+                                    {{if $data.o_pay_status==1}}<span class="label label-danger">未支付</span>{{else if $data.o_pay_status==2}}<span class="label label-danger">取消订单</span>{{else if $data.o_pay_status==3}}<span class="label label-success">已支付</span>{{/if}}
+                                </li>
+                                <li><b>订单添加时间:</b>&nbsp;&nbsp;{{$data.o_addtime}}</li>
+                                <li><b>订单状态:</b>&nbsp;&nbsp;
+                                    {{if $data.o_order_status==1}}<span class="label label-danger">未发货</span>{{else if $data.o_order_status==2}}<span class="label label-danger">已发货</span>{{else if $data.o_order_status==3}}<span class="label label-success">确认收货</span>{{/if}}
+                                </li>
+                                <li><b>订单更新时间:</b>&nbsp;&nbsp;{{$data.o_updatetime}}</li>
+                                <li><b>退款状态:</b>&nbsp;&nbsp;
+                                    {{if $data.o_refund_status==1}}<span class="label label-danger">未退款</span>{{else if $data.o_refund_status==2}}<span class="label label-danger">退款中</span>{{else if $data.o_refund_status==3}}<span class="label label-success">已退款</span>{{/if}}
+                                </li>
+                                <li><b>支付时间:</b>&nbsp;&nbsp;{{$data.o_paytime}}</li>
+                            </ul>
+                            {{if $orderProduct}}
+                            <div class="panel_header" style="">商品信息</div>
+                            {{foreach from=$orderProduct item=v2}}
+                                <ul class="order_content clearafter">
+                                    <li><b>商品名称:</b>&nbsp;&nbsp;{{$v2.p_title}}</li>
+                                    <li><b>商品价格:</b>&nbsp;&nbsp;{{$v2.p_price}}</li>
+                                    <li><b>型号:</b>&nbsp;&nbsp;{{$v2.pp_names}}</li>
+                                    <li><b>数量:</b>&nbsp;&nbsp;{{$v2.ol_num}}</li>
+                                </ul>
+                            {{/foreach}}
+                            {{/if}}
+                            {{if $express}}
+                            <div class="panel_header" style="">发货地址信息</div>
+                            <ul class="order_content clearafter">
+                                <li><b>快递公司:</b>&nbsp;&nbsp;{{$express.oe_express_company}}</li>
+                                <li><b>快递单号:</b>&nbsp;&nbsp;{{$express.oe_express_number}}</li>
+                            <li><b>联系人:</b>&nbsp;&nbsp;{{$express.oe_contacts}}</li>
+                                <li><b>联系电话:</b>&nbsp;&nbsp;{{$express.oe_phone}}</li>
+                            <li><b>地址:</b>&nbsp;&nbsp;{{$express.oe_address}}</li>
+                                </ul>
+                            {{/if}}
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-5">
+                    {{if $progressData}}
+                    <div class="panel panel-danger">
+                        <!-- Default panel contents -->
+                        <div class="panel-heading">订单进度</div>
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead style="border-bottom: solid 2px #c33;">
+                                    <tr>
+                                        <th>时间</th>
+                                        <th>信息</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {{foreach from=$progressData item=v}}
+                                    <tr>
+                                        <td>{{$v.op_addtime}}</td>
+                                        <td>{{$v.op_memo}}</td>
+                                    </tr>
+                                    {{/foreach}}
+                                    </tbody>
+                                </table>
+                        </div>
+                    </div>
+                    {{/if}}
+                </div>
+            </div>
+
+            <div class="clear10"></div>
+        </div>
+    </div>
+    <div class="clear"></div>
+</div>
+
+

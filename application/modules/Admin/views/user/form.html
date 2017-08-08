@@ -1,0 +1,48 @@
+<div class="modal-header">
+	<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+	<h3 id="modalTtile">{{if $row.a_id}}编辑用户{{else}}添加用户{{/if}}</h3>
+</div>
+
+<input type="hidden" name="id" value="{{$row.a_id}}" />
+<div class="modal-body">
+	<div class="control-group">
+	   <label class="control-label">登录名</label>
+		<div class="controls">
+		<input type="text" name="username" value="{{$row.a_username}}" placeholder="登录名" datatype="*" nullmsg="请填写登录名" {{if $row.a_id}}readonly="readonly"{{/if}} />
+		</div>
+	</div>
+	<div class="control-group">
+		<label class="control-label">姓名</label>
+		<div class="controls">
+		<input type="text" name="realname" value="{{$row.a_realname}}" placeholder="姓名" datatype="*" nullmsg="请填写姓名" />
+		</div>
+	</div>
+    {{if !$row.a_id}}
+    <div class="control-group">
+        <label class="control-label">密码</label>
+        <div class="controls">
+            <input type="password" name="password" value="" placeholder="密码" datatype="*" nullmsg="请填写密码" />
+        </div>
+    </div>
+    {{/if}}
+    <div class="control-group">
+        <label class="control-label">openID</label>
+        <div class="controls">
+            <input type="text" name="a_openId" value="{{$row.a_openId}}" placeholder="openID"  />
+        </div>
+    </div>
+	<div class="control-group">
+		<label class="control-label">联系电话</label>
+		<div class="controls">
+		<input type="text" name="phone" value="{{$row.a_phone}}" placeholder="联系电话" datatype="m" nullmsg="请填写联系电话" errormsg="联系电话格式不正确" />
+		</div>
+	</div>
+	<div class="control-group">
+		<label class="control-label">状态</label>
+		<div class="controls"><select name="status">{{$status_options}}</select></div>
+	</div>
+</div>
+<div class="modal-footer">
+	<button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+	<button class="btn btn-primary" type="submit">保存</button>
+</div>

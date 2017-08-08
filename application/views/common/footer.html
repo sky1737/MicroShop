@@ -1,0 +1,27 @@
+
+<!-- 工具栏 -->
+<nav class="bar bar-tab">
+    <a class="tab-item external my-btn" href="javascript:void(0);">
+        <span class="icon icon-app"></span>
+        <span class="tab-label">分类</span>
+    </a>
+    <a class="tab-item external {{if isset($nav) && $nav == 2}}active{{/if}}" href="/mall/find/index">
+        <span class="icon icon-browser"></span>
+        <span class="tab-label">发现</span>
+    </a>
+    <a class="tab-item external" href="/mall/shopCart/index">
+        <span class="icon icon-cart"></span>
+        <span class="tab-label">购物车</span>
+        {{if $cartCount > 0}}  <span class="badge">{{$cartCount}}</span>{{/if}}
+    </a>
+    <a class="tab-item external {{if isset($nav) && $nav == 4}}active{{/if}}" href="/mall/order/index">
+        <span class="icon icon-menu"></span>
+        <span class="tab-label">我的订单</span>
+    </a>
+</nav>
+<script>
+
+    $(document).on("click", ".my-btn", function() {
+        $.openPanel("#panel-js-demo");
+    });
+</script>

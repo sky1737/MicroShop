@@ -1,0 +1,88 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>收货地址</title>
+    <link rel="stylesheet" href="//g.alicdn.com/msui/sm/0.6.2/css/sm.css">
+    <link rel="stylesheet" href="/public/mall/css/style.css">
+</head>
+
+<body>
+
+<header class="bar bar-nav">
+    <a class="button pull-left" href="/mall/index/index">商城首页</a>
+    <h1 class="title">我的地址</h1>
+</header>
+
+
+
+<div class="content shopping-cart">
+    <div class="add">
+        <div class="list-block media-list">
+            <ul>
+                {{if $data}}
+                    {{foreach from=$data item=vo}}
+                        <li id="li_{{$vo.a_id}}" class="choiceBtn" rel="{{$vo.a_id}}">
+                            <label class="label-checkbox item-content">
+                                <!--<a href="{{if $url}}{{$url}}&addr={{$vo.a_id}}{{else}}javascript:void(0);{{/if}}">-->
+                                <input type="radio" name="my-radio" {{if $vo.a_default == 2}}checked=checked{{/if}}>
+                                <div class="item-media"><i class="icon icon-form-checkbox"></i></div>
+                                <div class="item-inner">
+                                    <div class="item-title-row">
+                                        <div class="item-title">{{$vo.a_realname}}</div>
+                                        <div class="bar-tab add-btn">
+                                            <a class="tab-item external" href="/mall/address/edit/id/{{$vo.a_id}}?url={{$baseUrl}}">
+                                                <span class="icon icon-edit"></span>
+                                            </a>
+                                            <a class="tab-item external" id="delete" rel="{{$vo.a_id}}" href="javascript:void(0);">
+                                                <span class="icon icon-remove"></span>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="item-subtitle">{{$vo.a_phone}}</div>
+                                    <div class="item-text">{{$vo.a_address}}</div>
+                                </div>
+                                <!--</a>-->
+                            </label>
+                        </li>
+                    {{/foreach}}
+                {{/if}}
+
+
+            </ul>
+        </div>
+
+
+        <nav class="bar bar-tab">
+            <a href="/mall/address/edit?url={{$baseUrl}}" class="bottom-btn button button-big button-fill button-success">添加收货地址</a>
+        </nav>
+    </div>
+</div>
+    <script type='text/javascript' src='//g.alicdn.com/sj/lib/zepto/zepto.js' charset='utf-8'></script>
+    <script type='text/javascript' src='//g.alicdn.com/msui/sm/0.6.2/js/sm.js' charset='utf-8'></script>
+<script>
+    $(document).ready(function(){
+        $('#delete').click(function(){
+            var id = $(this).attr('rel');
+            $.post('/ajax/address/delete', {id : id}, function(data){
+                $.alert(data.info);
+                if(data.status == 'y'){
+                    $('#li_' + id).remove();
+                }
+            }, 'json')
+        })
+
+        $('.choiceBtn').click(function(){
+            var id = $(this).attr('rel');
+            var url = '{{$url}}';
+            if(url){
+                location.href = url + '&addr=' + id;
+            }
+        })
+    })
+
+
+</script>
+</body>
+</html>

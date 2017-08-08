@@ -1,0 +1,97 @@
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3 id="modalTtile">产品分类管理</h3>
+</div>
+
+<!--内容区域-->
+<div class="modal-body">
+	<div class="alert alert-success" style="margin-bottom:30px;">
+	  <button type="button" class="close" data-dismiss="alert">×</button>
+		Tip: 排序数字越大，越靠前
+	</div>
+    <input type="hidden" name="id" value="{{$row.pc_id}}" />
+    <div class="control-group">
+        <label class="control-label">上级分类</label>
+        <div class="controls">
+            <select name="pc_pid">
+                 {{$categoryOption}}
+            </select>
+        </div>
+    </div>
+
+    <div class="control-group">
+        <label class="control-label">分类名称</label>
+        <div class="controls">
+            <input name="pc_name" class="input-xlarge" size="16" type="text" value="{{$row.pc_name}}" datatype="*" nullmsg="请填写分类名称" placeholder="分类名称" />
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label">分类别名</label>
+        <div class="controls">
+            <input name="pc_alise" class="input-xlarge" size="16" type="text" value="{{$row.pc_alise}}" datatype="*" nullmsg="请填写分类别名" placeholder="分类别名" />
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label">排序</label>
+        <div class="controls">
+            <input name="pc_order" class="span2" size="16" type="text" value="{{$row.pc_order}}" placeholder="排序" />
+        </div>
+    </div>
+
+
+    <div class="control-group">
+        <label class="control-label">状态</label>
+        <div class="controls">
+            <select name="pc_status" datatype="*" nullmsg="请选择状态">
+                {{$statusOption}}
+            </select>
+        </div>
+    </div>
+
+
+</div>
+
+<div class="modal-footer">
+    <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+    <button class="btn btn-primary" type="submit">保存</button>
+</div>
+<script>
+    $(document).ready(function(){
+        /*初始化上传文件*/
+        $("#upload").customFileInput();
+    })
+
+    var processing = false;
+    function ajaxFileUpload() {
+        if ( processing == true ) {
+            return false;
+        }
+
+        var dialog = $.dialog.loading('上传中，请稍等！').show();
+        processing = true;
+        $.ajaxFileUpload({
+            url:'/travel/category/upload/',
+            secureuri:false,
+            fileElementId:'upload',
+            dataType: 'json',
+            success: function (data, status){
+                setTimeout( function() {
+                    processing = false;
+                }, 500);
+                dialog.close();
+
+                if ( data.status == 'y' ) {
+                    $("#upload-img").attr('src', data.info.url).show();
+                    $('#file').val(data.info.fileName);
+                    return;
+                }
+
+                $.dialog.error(data.info);
+                return false;
+            },
+            error: function (data, status, e){
+                $.dialog.error(e);
+            }
+        });
+    }
+</script>

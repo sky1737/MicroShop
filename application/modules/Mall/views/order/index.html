@@ -1,0 +1,103 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>我的订单</title>
+    <link rel="stylesheet" href="//g.alicdn.com/msui/sm/0.6.2/css/sm.css">
+    <link rel="stylesheet" href="//g.alicdn.com/msui/sm/0.6.2/css/sm-extend.min.css">
+    <link rel="stylesheet" href="/public/mall/css/style.css">
+</head>
+
+<body>
+
+<div class="content">
+    <div class="orders">
+        <header class="bar bar-nav">
+            <a class="button pull-left" href="/mall/index/index">商城首页</a>
+            <a class="button pull-right" href="/mall/order/list">全部订单</a>
+            <h1 class="title">我的订单</h1>
+        </header>
+
+        <div class="content">
+            <div class="list-block media-list">
+                <ul>
+                    <li>
+                        <div class="item-content">
+                            <div class="item-media"><img src="{{$data.m_avatar}}" style='width: 2.2rem;'></div>
+                            <div class="item-inner">
+                                <div class="item-title-row">
+                                    <div class="item-title">{{$data.m_nickname}}</div>
+                                </div>
+                                <div class="item-subtitle">已绑定手机：{{$data.m_phone}}</div>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div class="bar-tab orders-menu">
+                <a class="tab-item external" href="/mall/order/list/?showType=1">
+                    <span class="icon iconfont">&#xe600;</span>
+                    <span class="tab-label">待付款</span>
+                    {{if $waitNumber}} <span class="badge">{{$waitNumber}}</span>{{/if}}
+                </a>
+                <a class="tab-item external" href="/mall/order/list/?showType=2">
+                    <i class="icon iconfont">&#xe602;</i>
+                    <span class="tab-label">待发货</span>
+                    {{if $payNumber}} <span class="badge">{{$payNumber}}</span>{{/if}}
+                </a>
+                <a class="tab-item external" href="/mall/order/list/?showType=3">
+                    <span class="icon iconfont">&#xe604;</span>
+                    <span class="tab-label">待收货</span>
+                    {{if $sendNumber}} <span class="badge">{{$sendNumber}}</span>{{/if}}
+                </a>
+                <a class="tab-item external" href="/mall/order/list/?showType=4">
+                    <span class="icon iconfont">&#xe605;</span>
+                    <span class="tab-label">已收货</span>
+                    {{if $overNumber}} <span class="badge">{{$overNumber}}</span>{{/if}}
+                </a>
+                <a class="tab-item external" href="/mall/order/list/?showType=5">
+                    <span class="icon iconfont">&#xe606;</span>
+                    <span class="tab-label">退款中</span>
+                    {{if $returnNumber}} <span class="badge">{{$returnNumber}}</span>{{/if}}
+                </a>
+            </div>
+            <div class="clear"></div>
+            <div class="bar-tab orders-menu">
+                <a class="tab-item external" href="/member/collect/index">
+                    <span class="icon iconfont">&#xe60a;</span>
+                    <span class="tab-label">收藏商品</span>
+                </a>
+                <a class="tab-item external" href="/mall/find/index">
+                    <span class="icon iconfont">&#xe601;</span>
+                    <span class="tab-label">发现好货</span>
+                </a>
+                <a class="tab-item external" href="/mall/shopcart/index">
+                    <span class="icon iconfont">&#xe607;</span>
+                    <span class="tab-label">购物车</span>
+                    <span class="badge">{{if $cartCount}}{{$cartCount}}{{else}}{{/if}}</span>
+                </a>
+                <a class="tab-item external" href="/mall/address/index">
+                    <span class="icon iconfont">&#xe608;</span>
+                    <span class="tab-label">收货地址</span>
+                </a>
+            </div>
+            <div class="clear"></div>
+        </div>
+
+    </div>
+</div>
+
+<script type='text/javascript' src='//g.alicdn.com/sj/lib/zepto/zepto.js' charset='utf-8'></script>
+<script type='text/javascript' src='//g.alicdn.com/msui/sm/0.6.2/js/sm.js' charset='utf-8'></script>
+<script type='text/javascript' src='//g.alicdn.com/msui/sm/0.6.2/js/sm-extend.min.js' charset='utf-8'></script>
+{{include file="application/views/common/footer.html"}}
+<script>
+    $(function() {
+        $(".content").scroller({
+            type: 'native'
+        });
+    });
+</script>
+</body>
+</html>

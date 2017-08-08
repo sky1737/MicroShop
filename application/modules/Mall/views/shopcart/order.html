@@ -1,0 +1,127 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>确认购买</title>
+    <link rel="stylesheet" href="//g.alicdn.com/msui/sm/0.6.2/css/sm.css">
+    <link rel="stylesheet" href="/public/mall/css/style.css">
+</head>
+
+<body>
+<!--<header class="bar bar-nav">-->
+    <!--<a class="button pull-left" href="index.html">商城首页</a>-->
+    <!--<a class="button pull-right button-danger open-popup">快速登录</a>-->
+    <!--<h1 class="title">确认购买</h1>-->
+<!--</header>-->
+
+<div class="content buying">
+    <div class="list-block">
+        <a class="item-content item-link" href="/mall/address/index/pay/1">
+            <div class="item-inner">
+                {{if $addrInfo}}
+                {{$addrInfo.a_province}} {{$addrInfo.a_city}} {{$addrInfo.a_area}} {{$addrInfo.a_address}} {{$addrInfo.a_realname}} {{$addrInfo.a_phone}}
+                {{else}}
+                请填写收货地址
+                {{/if}}
+            </div>
+        </a>
+    </div>
+
+    <div class="list-block media-list">
+        <ul>
+            <li>
+                <label class="label-checkbox item-content">
+                    <input name="my-radio" type="radio" checked>
+                    <div class="item-media"><i class="icon icon-form-checkbox"></i></div>
+                    <div class="item-inner">
+                        <div class="item-title-row">
+                            <div class="item-title">在线支付</div>
+                        </div>
+                    </div>
+                </label>
+            </li>
+        </ul>
+    </div>
+
+    <div class="orders-title">商品信息</div>
+    {{if $cartList}}
+        {{foreach from=$cartList item=vo}}
+            <div class="orders-goods">
+                <img src="{{$smarty.const.APP_IMAGE_URL}}{{$vo.productInfo.p_cover}}">
+                <div class="text">
+                    <p>{{$vo.productInfo.p_title}}<span>价格：￥{{$vo.price}}</span></p>
+                    <p>{{if $vo.ppname}}型号：{{$vo.ppname}}{{/if}}<span>x1</span></p>
+                </div>
+            </div>
+        {{/foreach}}
+    {{/if}}
+    <div class="goods-list">
+        <p>商品金额<span>¥{{$totalPrice}}</span></p>
+        <!--<p>运费<span>￥100.0</span>0</p>-->
+        <p>实付款<strong>¥<span id="totalPrice">{{$totalPrice}}</span></strong></p>
+    </div>
+    <div class="orders-title">留言信息</div>
+    <div class="message">
+        <!--<input name="wechat" id="wechat" type="text" placeholder="微信号">-->
+        <textarea name="message" id="message" cols="" rows="" placeholder="留言内容"></textarea>
+    </div>
+    <a href="javascript:void(0);" id="buyBtn" class="bottom-btn button button-big button-fill button-danger">去付款</a>
+</div>
+<script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+<script type='text/javascript' src='//g.alicdn.com/sj/lib/zepto/zepto.js' charset='utf-8'></script>
+<script type='text/javascript' src='//g.alicdn.com/msui/sm/0.6.2/js/sm.js' charset='utf-8'></script>
+<script>
+    var appId     = '{{$signPackage.appId}}';var timestamp = '{{$signPackage.timestamp}}';
+    var nonceStr  = '{{$signPackage.nonceStr}}';var signature = '{{$signPackage.signature}}';
+
+    wx.config({
+        appId: appId,
+        timestamp:timestamp,
+        nonceStr: nonceStr,
+        signature: signature,
+        jsApiList: [
+            'chooseWXPay'
+        ]
+    });
+
+    var operation = false;
+
+    $('#buyBtn').click(function(){
+        var addr = '{{$addrInfo.a_id|default:0}}';
+        var scids = '{{$scids}}';
+        var message = $('#message').val();
+        if(operation){
+            return;
+        }
+
+        operation = true;
+        $.post('/ajax/product/buyCart', {scids : scids, addr:addr,memo:message}, function(data){
+            operation = false;
+            if(data.status == 'y'){
+                var jsApiParameters = data.info.params;
+                var orderNo = data.info.orderNo;
+                var id = data.info.id;
+                Pay(jsApiParameters, "/mall/order/index", orderNo, id);
+            }else{
+                $.alert(data.info);
+            }
+        }, 'json')
+    })
+
+    function Pay(jsApiParameters, url){
+        wx.chooseWXPay({
+            timestamp: jsApiParameters.timeStamp,
+            nonceStr: jsApiParameters.nonceStr,
+            package: jsApiParameters.package,
+            signType: jsApiParameters.signType, // 注意：新版支付接口使用 MD5 加密
+            paySign: jsApiParameters.paySign,
+            success: function (res) {
+                window.location.href = url;
+            }
+        });
+    }
+
+</script>
+</body>
+</html>

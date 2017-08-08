@@ -1,0 +1,31 @@
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3 id="modalTtile">套餐分类管理</h3>
+</div>
+
+<!--内容区域-->
+<div class="modal-body">
+
+    <input type="hidden" name="id" value="{{$row.pt_id}}" />
+    <div class="control-group">
+        <label class="control-label">分类名称</label>
+        <div class="controls">
+            <input name="pt_name" class="input-xlarge" size="16" type="text" value="{{$row.pt_name}}" datatype="*" nullmsg="请填写分类名称" placeholder="分类名称" />
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label">状态</label>
+        <div class="controls">
+            <select name="pt_status" datatype="*" nullmsg="请选择状态">
+                {{$statusOption}}
+            </select>
+        </div>
+    </div>
+
+
+</div>
+
+<div class="modal-footer">
+    <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+    <button class="btn btn-primary" type="submit">保存</button>
+</div>

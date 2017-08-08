@@ -1,0 +1,67 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>发现-列表</title>
+    <link rel="stylesheet" href="//g.alicdn.com/msui/sm/0.6.2/css/sm.css">
+    <link rel="stylesheet" href="/public/mall/css/style.css">
+</head>
+
+<body>
+
+<div class="buttons-tab">
+    {{if $categorys}}
+        {{foreach from=$categorys key=key item=vo}}
+            <a href="#tab{{$vo.nc_id}}" class="tab-link {{if $key == 0}}active{{/if}} button">{{$vo.nc_name}}</a>
+        {{/foreach}}
+    {{/if}}
+</div>
+
+
+<!-- 列表 -->
+<div class="content find-list">
+    <div class="tabs">
+        {{if $categorys}}
+            {{foreach from=$categorys key=key item=vo}}
+        <!-- tab1 -->
+                <div id="tab{{$vo.nc_id}}" class="tab {{if $key == 0}} active{{/if}}">
+                    {{if $data}}
+                        {{foreach from=$data item=vd}}
+                            {{if $vd.nc_id == $vo.nc_id}}
+                                <div class="card demo-card-header-pic">
+                                    <a href="/mall/find/details/id/{{$vd.n_id}}">
+                                        <div valign="bottom" class="card-header color-white no-border no-padding">
+                                            <img class='card-cover' src="{{$vd.n_cover}}" width="355" height="199">
+                                        </div>
+                                        <div class="card-content">
+                                            <div class="card-content-inner">
+                                                <p class="color-h4">{{$vd.n_title}}</p>
+                                                <p class="color-text">{{$vd.n_des}}</p>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                            {{/if}}
+                        {{/foreach}}
+                    {{/if}}
+
+                </div>
+            {{/foreach}}
+        {{/if}}
+
+    </div>
+</div>
+
+<script type='text/javascript' src='//g.alicdn.com/sj/lib/zepto/zepto.js' charset='utf-8'></script>
+<script type='text/javascript' src='//g.alicdn.com/msui/sm/0.6.2/js/sm.js' charset='utf-8'></script>
+{{include file="application/views/common/footer.html"}}
+<script>
+    $(function() {
+        $(".content").scroller({
+            type: 'native'
+        });
+    });
+</script>
+</body>
+</html>

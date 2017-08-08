@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>文章管理</title>
+    <!-- Bootstrap -->
+    <link href="/public/admin/css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link href="/public/admin/css/bootstrap-responsive.min.css" rel="stylesheet">
+    <link href="/public/admin/css/bootstrap-responsive.min.css" rel="stylesheet">
+    <link href="/public/admin/css/bootstrap-customfile.css" rel="stylesheet" type="text/css" />
+    <link href="/public/admin/js/umeditor/themes/default/css/umeditor.css" type="text/css" rel="stylesheet">
+
+</head>
+<body>
+<ul class="breadcrumb pull-left">
+    <li class="active"><a href="/admin/news/index">文章列表</a><span class="divider">/</span></li>
+    <li>文章管理</li>
+</ul>
+
+<div class="clear"></div>
+
+        <form class="form-horizontal" id="form-save" action="/admin/news/save/">
+            <div class="tab-pane active" id="basic_right">
+                <input type="hidden" name="id" value="{{$row.n_id}}" />
+                <div class="control-group">
+                    <label class="control-label">所在分类</label>
+                    <div class="controls">
+                        <select datatype="*"  nullmsg="请选择所在分类" id="nc_id" name="nc_id" class="form-control" style="width:200px;">
+                            {{$categoryOption}}
+                        </select>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label">标题</label>
+                    <div class="controls">
+                        <input type="text" class="form-control" name="n_title" value="{{$row.n_title}}" placeholder="文章标题" datatype="*" nullmsg="请填写标题名称" style="width: 400px;"/>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label">文章简介</label>
+                    <div class="controls">
+                        <textarea  name="n_des" value="{{$row.n_des}}" placeholder="文章简介" class="form-control" rows="3" style="width: 400px;">{{$row.n_des}}</textarea>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label">文章内容</label>
+                    <div class="controls">
+                        <textarea name="n_content" id="n_content" style="width:800px;overflow-y:auto;max-height:200px;">{{$row.n_content}}</textarea>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label">封面图片</label>
+                    <div class="controls">
+                        <input type="file" name="upload" id="upload" onchange="return ajaxFileUpload();" />
+                        {{if $row.n_cover}}
+                        <div style="padding-top:10px;"><img src="{{$smarty.const.APn_IMAGE_URL}}{{$row.n_cover}}" id="upload-img" style="max-width:200px;"/></div>
+                        <input type="hidden" name="n_cover" id="file"  value="{{$row.n_cover}}" datatype="*" nullmsg="请上传封面图片"/>
+                        {{else}}
+                        <input type="hidden" name="n_cover" id="file" datatype="*" nullmsg="请上传封面图片" />
+                        <div style="padding-top:10px;"><img src="" id="upload-img" style="max-width:200px; display:none"/></div>
+                        {{/if}}
+                    </div>
+                </div>
+
+
+                <div class="control-group">
+                    <label class="control-label">排序</label>
+                    <div class="controls">
+                        <input type="text" class="form-control" name="n_sort" value="{{$row.n_sort}}" placeholder="排序" datatype="n" nullmsg="请填写排序" />
+                    </div>
+                </div>
+
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label"></label>
+                <div class="col-sm-4">
+                    <button class="btn btn-primary" type="submit">保存</button>
+                </div>
+            </div>
+        </form>
+
+<script src="/public/admin/js/jquery-1.8.2.min.js"></script>
+<script src="/public/admin/js/bootstrap.min.js"></script>
+<script src="/public/admin/js/common.js"></script>
+<script src="/public/admin/js/umeditor/umeditor.config.js"></script>
+<script src="/public/admin/js/umeditor/umeditor.js"></script>
+<script src="/public/admin/js/umeditor/lang/zh-cn/zh-cn.js"></script>
+<script src="/public/admin/js/Validform_v5.3.2_min.js"></script>
+<script src="/public/admin/js/jquery.ajaxfileupload.js"></script>
+<script src="/public/admin/js/bootstrap-customfile.js"></script>
+<script src="/public/admin/js/bootstrap-datetimepicker.js"></script>
+<script src="/public/admin/js/jquery.artDialog.min.js"></script>
+<script>
+    var editor =  '';
+
+    $(function(){
+        editor = UM.getEditor('n_content');
+    });
+
+    $("#form-save").Validform({
+        ajaxPost: true,
+        tipSweep: true,
+        tiptype:function(msg,o,cssctl){
+            if(o.type == 3)
+                $.dialog.tips(msg);
+        },
+        beforeSubmit:function(curform){
+        },
+        callback:function(response){
+            $.dialog.tips(response.info);
+            if ( response.status == 'y' ) {
+                window.setTimeout(function(){
+                    location.reload();
+                }, 2000)
+            }
+        }
+    });
+
+    /*初始化上传文件*/
+    $("#upload").customFileInput();
+    var processing = false;
+    function ajaxFileUpload() {
+        if ( processing == true ) {
+            return false;
+        }
+
+        var dialog     = $.dialog.loading('上传中，请稍等！').show();
+        processing = true;
+        $.ajaxFileUpload({
+            url:'/admin/news/upload',
+            secureuri:false,
+            fileElementId:'upload',
+            dataType: 'json',
+            success: function (data, status){
+                setTimeout( function() {
+                    processing = false;
+                }, 500);
+                dialog.close();
+
+                if ( data.status == 'y' ) {
+                    $("#upload-img").attr('src', data.info.url).show();
+                    $('#file').val(data.info.url);
+                    return;
+                }
+
+                $.dialog.error(data.info);
+                return false;
+            },
+            error: function (data, status, e){
+                $.dialog.error(e);
+            }
+        });
+    }
+</script>
+</body>
+</html>

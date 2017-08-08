@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>文章分类管理</title>
+    <!-- Bootstrap -->
+    <link href="/public/admin/css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link href="/public/admin/css/bootstrap-responsive.min.css" rel="stylesheet">
+</head>
+<body>
+<ul class="breadcrumb pull-left">
+    <li>文章分类管理<span class="divider">/</span></li>
+    <li class="active"><a href="javascript:void(0);">&nbsp;分类管理</a></li>
+</ul>
+<div class="btn-group pull-right">
+    <button type="button" class="btn btn-primary pull-right" data-toggle="modal" data-target="#adminModal" href="/admin/newscategory/form/">添加分类</button>
+    <button class="btn" onClick="window.location.reload();">刷新界面</button>
+</div>
+<div class="clear"></div>
+
+<!-- 搜索区域 -->
+<form class="form-search" id="searchForm" style="margin-bottom:20px;" method="get" action="/admin/newscategory/index/">
+    分类名称： <input type="text" name="name" value="{{$name}}" class="form-control" placeholder="分类名称">
+    选择：<select id="pid" name="pid" class="form-control" style="display: inline-block; width: 200px;">
+    {{$categoryOption}}
+</select>
+    <button type="submit" class="btn">搜索</button>
+</form> <!-- 表格 -->
+<table class="table table-bordered table-striped">
+    <tr>
+        <td>分类ID</td>
+        <td>分类名称</td>
+        <td>别名</td>
+        <td>排序</td>
+        <td>添加时间</td>
+        <td>状态</td>
+        <td>操作</td>
+    </tr>
+    {{if $data}}
+    {{foreach from=$data item=row}}
+    <tr>
+        <td>{{$row.nc_id}}</td>
+        <td>{{$row.nc_name}}</td>
+        <td>{{$row.nc_alias}}</td>
+        <td>{{$row.nc_sort}}</td>
+        <td>{{$row.nc_addtime}}</td>
+        <td><a href="#" data-json="确认要更改状态吗？" data-href="/ajax/Newscategory/status/id/{{$row.nc_id}}/status/{{$row.nc_status}}">
+            <i class="{{if $row.nc_status == 1}}icon-eye-open{{else}}icon-eye-close{{/if}}" title="{{if $row.nc_status == 2}}禁用{{else}}正常{{/if}}"></i>
+            {{if $row.nc_status == 1}}<span class="label label-success">正常</span>{{else}}<span class="label label-warning">禁用</span>{{/if}}
+        </a></td>
+        <td>
+            <a  data-toggle="modal" data-target="#adminModal" href="{{$baseUrl}}/form/id/{{$row.nc_id}}" title="编辑分类">编辑</a>&nbsp;&nbsp;
+        </td>
+    </tr>
+    {{/foreach}}
+    {{/if}}
+</table>
+
+<div class="pagination pagination-small">
+    <ul class="pull-right">{{$page}}<a class="current">总记录：{{$total}}</a></ul>
+    <div class="clear"></div>
+</div>
+<!--弹窗-->
+<form class="form-horizontal" action="/ajax/Newscategory/save" method="post">
+    <div class="modal fade" id="adminModal" tabindex="-1" role="dialog"></div>
+</form>
+<script src="/public/admin/js/jquery-1.8.2.min.js"></script>
+<script src="/public/admin/js/bootstrap.min.js"></script>
+<script src="/public/admin/js/Validform_v5.3.2_min.js"></script>
+<script src="/public/admin/js/jquery.artDialog.min.js"></script>
+<script src="/public/admin/js/common.js"></script>
+</body>
+</html>

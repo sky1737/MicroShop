@@ -1,0 +1,42 @@
+{{if $allData}}
+{{foreach from=$allData item=v}}
+<div class="card">
+    <a href="/mall/order/details/id/{{$v.o_id}}">
+        <div class="card-header">
+            {{if $v.o_pay_status==1 && $v.o_order_status==1}}
+            待付款
+            {{elseif $v.o_pay_status==3 && $v.o_order_status==1}}
+            待发货
+            {{elseif $v.o_pay_status==3 && $v.o_order_status==2}}
+            待发货
+            {{elseif $v.o_pay_status==3 && $v.o_order_status==3}}
+            待评价
+            {{elseif $v.o_pay_status==2 && $v.o_order_status==1}}
+            订单取消
+            {{/if}}
+        </div>
+        <div class="card-content">
+            <div class="list-block media-list">
+                <ul>
+                    <li class="item-content">
+                        <div class="item-media">
+                            <img src="{{if $v.p_cover}}{{$smarty.const.APP_IMAGE_URL}}{{$v.p_cover}}{{else}}{{/if}}" width="44">
+                        </div>
+                        <div class="item-inner">
+                            <div class="item-title-row">
+                                <div class="item-title">{{$v.p_title}}</div>
+                            </div>
+                            <div class="item-subtitle">型号：{{if $v.pp_names}}{{$v.pp_names}}{{else}}暂无{{/if}}（福州送货上门）</div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="card-footer">
+            <span>共{{if $v.ol_num}}{{$v.ol_num}}{{else}}0{{/if}}件商品</span>
+            <span>总价：￥{{if $v.o_payment_amount}}{{$v.o_payment_amount}}{{else}}0{{/if}}</span>
+        </div>
+    </a>
+</div>
+{{/foreach}}
+{{/if}}

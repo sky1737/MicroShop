@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>文章管理</title>
+    <!-- Bootstrap -->
+    <link href="/public/admin/css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link href="/public/admin/css/bootstrap-responsive.min.css" rel="stylesheet">
+</head>
+<body>
+<ul class="breadcrumb pull-left">
+    <li>文章管理<span class="divider">/</span></li>
+    <li class="active"><a href="/admin/news/index">文章管理</a></li>
+</ul>
+<div class="btn-group pull-right">
+    <button type="button" class="btn btn-primary pull-right"  onclick="location.href='/admin/news/form/'">添加文章</button>
+    <button class="btn" onClick="window.location.reload();">刷新界面</button>
+</div>
+<div class="clear"></div>
+
+<!--搜索区域-->
+<form class="form-search" id="searchForm" style="margin-bottom:20px;" method="get" action="{{$baseUrl}}index/">
+    标题： <input type="text" name="title" value="{{$title}}" class="form-control" placeholder="标题" style="width: 300px;">
+    分类：<select name="pid" id="pid" class="form-control">
+    {{$categoryOption}}
+</select>
+    状态：
+    <select name="status" id="status" class="form-control">
+        {{$statusOption}}
+    </select>
+    <button type="submit" class="btn">搜索</button>
+</form>
+<!-- 内容区域 -->
+<table class="table table-striped table-bordered table-condensed table-hover">
+    <thead>
+    <tr>
+        <th>序号</th>
+        <th>所在分类</th>
+        <th>标题</th>
+        <th>排序</th>
+        <th>状态</th>
+        <th>添加时间</th>
+        <th>操作</th>
+    </tr>
+    </thead>
+    <tbody>
+    {{if $data}}
+    {{foreach from=$data item=row}}
+    <tr>
+        <td>{{$row.n_id}}</td>
+        <td>{{$cateList[$row.nc_id]}}</td>
+        <td>
+            {{if $cateList[$row.nc_id]=='头条'}}
+            {{$row.n_title}}---{{if $row.n_type==2}}<span class="label label-success">国内新闻</span>{{else}}<span class="label label-danger">国际新闻</span>{{/if}}
+            {{else}}
+            {{if $row.nc_id != 11}}
+            {{$row.n_title}}
+            {{/if}}
+            {{/if}}</td>
+
+        <td>{{$row.n_sort}}</td>
+        <td>
+            <a href="javascript:void(0);" data-json="确认要更改状态吗？" data-href="/admin/news/status/id/{{$row.n_id}}/status/{{$row.n_status}}">
+                <i class="{{if $row.n_status == 1}}icon-eye-open{{else}}icon-eye-close{{/if}}" title="{{if $row.n_status == 2}}禁用{{else}}正常{{/if}}"></i>
+                {{if $row.n_status == 1}}<span class="label label-success">正常</span>{{else}}<span class="label label-warning">禁用</span>{{/if}}
+            </a>
+        </td>
+        <td>{{$row.n_addtime}}</td>
+        <!--<td>-->
+        <!--<a href="javascript:void(0);" data-json="确认要更改状态吗？" data-href="/news/recommend/id/{{$row.n_id}}/status/{{$row.n_status}}">-->
+        <!--<i class="glyphicon {{if $row.n_recommend == 1}}icon-eye-open{{else}}icon-eye-close{{/if}}" title="{{if $row.n_status == 2}}禁用{{else}}正常{{/if}}"></i>-->
+        <!--{{if $row.n_recommend == 1}}<span class="label label-success">推荐</span>{{else}}<span class="label label-warning">未推荐</span>{{/if}}-->
+        <!--</a>-->
+        <!--</td>-->
+        <td>
+            <a class="icon-edit" href="{{$baseUrl}}/form/id/{{$row.n_id}}" title="编辑"></a>&nbsp;&nbsp;
+            <a class="icon-remove" data-json="确认要删除吗？" href="javascript:void(0);" title="删除" data-href="/admin/news/delete/id/{{$row.n_id}}/"></a>&nbsp;&nbsp;
+        </td>
+    </tr>
+    {{/foreach}}
+    {{/if}}
+    </tbody>
+</table>
+<div class="pagination pagination-small">
+    <ul class="pull-right">{{$page}}<a class="current">总记录：{{$total}}</a></ul>
+    <div class="clear"></div>
+</div>
+
+<script src="/public/admin/js/jquery-1.8.2.min.js"></script>
+<script src="/public/admin/js/bootstrap.min.js"></script>
+<script src="/public/admin/js/Validform_v5.3.2_min.js"></script>
+<script src="/public/admin/js/jquery.artDialog.min.js"></script>
+<script src="/public/admin/js/common.js"></script>
+</body>
+</html>

@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>商品管理</title>
+    <!-- Bootstrap -->
+    <link href="/public/admin/css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link href="/public/admin/css/bootstrap-responsive.min.css" rel="stylesheet">
+    <link href="/public/admin/css/bootstrap-datetimepicker.css" rel="stylesheet">
+</head>
+
+<body>
+<ul class="breadcrumb pull-left">
+    <li>商品管理 <span class="divider">/</span></li>
+    <li class="active">商品列表</li>
+</ul>
+<div class="btn-group pull-right">
+    <button class="btn" onClick="window.location.href='/admin/product/add/'" style="margin-right: 20px;">添加商品</button>
+    <button class="btn" onClick="window.location.reload();">刷新界面</button>
+</div>
+<div class="clear"></div>
+<!-- 搜索区域 -->
+<form class="form-search" id="searchForm" style="margin-bottom:20px;" method="get" action="{{$baseUrl}}index/">
+    商品名称：<input type="text" name="title" value="{{$title}}" class="form-control" placeholder="商品名称关键字" style="width: 280px;margin-right: 10px;">
+    所在分类：<select class="form-control" name="type" id="type"  class="input-medium" style="width:150px;">{{$categoryOption}}</select>
+    &nbsp;&nbsp;状态：{{$statusOption}}
+    &nbsp;&nbsp;添加时间: <input type="text" class="form-control" name="startTime" id="startTime" value="{{$startTime}}"> ~
+    <input type="text" class="form-control" name="endTime" id="endTime" value="{{$endTime}}">&nbsp;&nbsp;
+    <button type="submit" class="btn">搜索</button>
+</form>
+<!-- 内容区域 -->
+<table class="table table-striped table-condensed table-bordered table-hover">
+    <thead>
+    <tr>
+        <th>商品id</th>
+        <th>商品名称</th>
+        <th>所在分类</th>
+        <th>销量</th>
+        <th>产品状态</th>
+        <th>添加时间</th>
+        <th>更新时间</th>
+        <th>操作</th>
+    </tr>
+    </thead>
+    <tbody>
+    {{if $allData}}
+    {{foreach from=$allData item=v}}
+        <tr>
+            <td>{{$v.p_id}}</td>
+            <td>{{$v.p_title}}</td>
+            <td>{{$category_data[$v.pc_id]}}</td>
+            <td>{{$v.p_sales}}</td>
+            <td>
+                {{if $v.p_status == 1}}<span class="label label-success">上架</span>{{else}}<span class="label label-important">下架</span>{{/if}}
+                <a data-json="{{if $v.p_status == 1}}确认要更改下架吗？{{else}}确认要上架吗？{{/if}}" data-href="{{$baseUrl}}status/id/{{$v.p_id}}/status/{{$v.p_status}}">
+                    <i class="{{if $v.p_status == 1}}icon-eye-open{{else}}icon-eye-close{{/if}}" title="{{if $v.p_status == 2}}下架{{else}}上架{{/if}}"></i></a>
+            </td>
+            <td>{{$v.p_addTime}} </td>
+            <td>{{$v.p_updateTime}} </td>
+            <td>
+                <a title="编辑商品" href="/admin/product/add/?id={{$v.p_id}}&name={{$title}}"><i class="icon-edit"></i></a>
+                <!--<a title="预览商品" data-json="请通过企业号预览商品：<br/>{{$v.p_title}}" data-href="/admin/product/view/?id={{$v.p_id}}"><i class="icon-eye-open"></i></a>-->
+                {{if $v.p_status == 2}}<a title="删除商品" data-json="确认要删除此商品么？" data-href="/admin/product/delete/id/{{$v.p_id}}"><i class="icon-remove"></i></a>{{/if}}
+            </td>
+        </tr>
+    {{/foreach}}
+    {{/if}}
+     </tbody>
+</table>
+
+<div class="pagination pagination-small">
+    <ul class="pull-right">{{$page}}<a class="current">总记录：{{$total}}</a></ul>
+    <div class="clear"></div>
+</div>
+
+<script src="/public/admin/js/jquery-1.8.2.min.js"></script>
+<script src="/public/admin/js/bootstrap.min.js"></script>
+<script src="/public/admin/js/Validform_v5.3.2_min.js"></script>
+<script src="/public/admin/js/jquery.artDialog.min.js"></script>
+<script src="/public/admin/js/common.js"></script>
+<script src="/public/admin/js/bootstrap-datetimepicker.js"></script>
+<script>
+    $("#startTime,#endTime").datetimepicker({
+        format: "yyyy-mm-dd hh:ii",
+        autoclose: 1,
+        pickerPosition: "bottom-left"
+    });
+</script>
+</body>
+</html>
